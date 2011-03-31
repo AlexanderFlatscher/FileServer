@@ -25,32 +25,38 @@ void Consumer::run(void)
 		httpRequest << std::string(requestBuffer, requestSize);
 		httpRequest >> method >> filename;
 
-		requestedFile.open(DOWNLOAD_FILE_PATH + filename, std::ios::binary);
+        std::cout << "method: " << method << std::endl;
 
-		if(requestedFile.is_open())
-		{
-			// reading requested file
-			while(getline(requestedFile, singleLine))
-			{
-				payload << singleLine << std::endl;
-			}
+        if(method == "GET"){
+		    requestedFile.open(DOWNLOAD_FILE_PATH + filename, std::ios::binary);
 
-			// prepare http respone
-			httpResponse << "HTTP/1.0 200 OK\n";
-			httpResponse << "Content-Type: application/octet-stream\n";
+		    if(requestedFile.is_open())
+		    {
+			    // reading requested file
+			    while(getline(requestedFile, singleLine))
+			    {
+				    payload << singleLine << std::endl;
+			    }
 
-			requestedFile.close();
-		}
-		else
-		{
-			// prepare http error response
-			payload << "<html><head><title>404 Not Found</title><body><h1>404 Not Found</h1><p>The requested file was not found.</p></body></html>";
-			httpResponse << "HTTP/1.0 404 Not Found\n";
-			httpResponse << "Content-Type: text/html\n";
-		}
+			    // prepare http respone
+			    httpResponse << "HTTP/1.0 200 OK\n";
+			    httpResponse << "Content-Type: application/octet-stream\n";
 
-		httpResponse << "Server: FileServer/0.0.1\n";
-		httpResponse << "Content-Length: " << payload.str().length() << "\n\n";
+			    requestedFile.close();
+		    }
+		    else
+		    {
+			    // prepare http error response
+			    payload << "<html><head><title>404 Not Found</title><body><h1>404 Not Found</h1><p>The requested file was not found.</p></body></html>";
+			    httpResponse << "HTTP/1.0 404 Not Found\n";
+			    httpResponse << "Content-Type: text/html\n";
+		    }
+
+		    httpResponse << "Server: FileServer/0.0.1\n";
+		    httpResponse << "Content-Length: " << payload.str().length() << "\n\n";
+        }
+        else if(method == "POST"){}
+        else {/* TODO redirect to xhamster */}
 
 		// send the http-response header
 		socket->send(boost::asio::buffer(httpResponse.str().c_str(), httpResponse.str().length()));

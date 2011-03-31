@@ -5,8 +5,10 @@
 #define REQUESTED_BUFFER_SIZE 1024
 
 #include "BoundedBuffer.h"
+#include "ReaderWriterMutex.h"
 #include <fstream>
 #include <boost/filesystem.hpp>
+#include <map>
 
 class Consumer
 {
@@ -16,6 +18,8 @@ public:
 
 private:
 	BoundedBuffer* connectedSockets;
+    std::map<std::string, ReaderWriterMutex*> fileMutexes;
+
 };
 
 #endif

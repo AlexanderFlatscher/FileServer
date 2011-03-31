@@ -24,6 +24,9 @@
     <ClInclude Include="BoundedBuffer.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="ReaderWriterMutex.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Producer.cpp">
@@ -36,6 +39,9 @@
       <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="BoundedBuffer.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="ReaderWriterMutex.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>

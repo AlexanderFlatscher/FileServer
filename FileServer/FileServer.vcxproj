@@ -79,12 +79,14 @@
     <ClInclude Include="BoundedBuffer.h" />
     <ClInclude Include="Consumer.h" />
     <ClInclude Include="Producer.h" />
+    <ClInclude Include="ReaderWriterMutex.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BoundedBuffer.cpp" />
     <ClCompile Include="Consumer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Producer.cpp" />
+    <ClCompile Include="ReaderWriterMutex.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
