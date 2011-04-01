@@ -18,6 +18,6 @@ void Producer::run(void)
 		// put the new socket in the BoundedBuffer
 		connectedSockets->put(socket);
 
-		std::cout << "Connection accepted from " << socket->remote_endpoint() << std::endl;
+		//std::cout << "Connection accepted from " << socket->remote_endpoint() << std::endl;
 	}
 }

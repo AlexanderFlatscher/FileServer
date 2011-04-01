@@ -1,0 +1,27 @@
+<html>
+<head>
+
+	<title>Fileserver Uploader</title>
+
+<script type="text/javascript" >
+
+	function send() {
+
+		var filename = document.getElementById("filename").value;
+		document.getElementById("form").action = "http://localhost/" + filename;
+		
+	}
+
+</script>
+</head>
+
+<body>
+	
+	<form id="form" enctype="multipart/form-data" action="" method="post">
+		FILENAME: <input type="text" id="filename" /><br/>
+		<input type="file" name="file" /><br/>
+		<input type="submit" value="Upload" onClick="send()"/>
+	</form>
+	
+</body>
+</html>
