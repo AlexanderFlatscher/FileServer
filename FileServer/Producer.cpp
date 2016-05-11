@@ -1,6 +1,13 @@
-#include "Producer.h"
+/*
+ * Producer.cpp
+ *
+ *  Created on: May 2, 2016
+ *      Author: josen
+ */
 
-Producer::Producer(BoundedBuffer* connectedSockets) : acceptor(ioService, tcp::endpoint(tcp::v4(), PORT))
+#include "Producer.hpp"
+
+Producer::Producer(boost::shared_ptr<BoundedBuffer>& connectedSockets) : acceptor(ioService, tcp::endpoint(tcp::v4(), PORT))
 {
 	this->connectedSockets = connectedSockets;
 	std::cout << "File server listening on port " << PORT << std::endl;
@@ -10,7 +17,8 @@ void Producer::run(void)
 {
 	while(true)
 	{
-		tcp::socket *socket = new tcp::socket(ioService);
+		//boost::shared_ptr<tcp::socket> socket = new tcp::socket(ioService);
+		boost::shared_ptr<tcp::socket> socket(new tcp::socket(ioService));
 
 		// accept the connection
 		acceptor.accept(*socket);
