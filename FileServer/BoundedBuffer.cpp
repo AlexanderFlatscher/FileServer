@@ -1,8 +1,15 @@
-#include "BoundedBuffer.h"
+/*
+ * BoundedBuffer.cpp
+ *
+ *  Created on: May 2, 2016
+ *      Author: josen
+ */
+
+#include "BoundedBuffer.hpp"
 
 BoundedBuffer::BoundedBuffer(unsigned int maxElements) : availableElements(0), freeElements(maxElements) {}
 
-void BoundedBuffer::put(tcp::socket* element)
+void BoundedBuffer::put(boost::shared_ptr<tcp::socket>& element)
 {
 	freeElements.wait();
 	{
@@ -12,9 +19,9 @@ void BoundedBuffer::put(tcp::socket* element)
 	availableElements.post();
 }
 
-tcp::socket* BoundedBuffer::get(void)
+boost::shared_ptr<tcp::socket> BoundedBuffer::get(void)
 {
-	tcp::socket* element;
+	boost::shared_ptr<tcp::socket> element;
 
 	availableElements.wait();
 	{
@@ -26,3 +33,5 @@ tcp::socket* BoundedBuffer::get(void)
 
 	return element;
 }
+
+

@@ -1,15 +1,27 @@
-#include "Consumer.h"
+/*
+ * Consumer.cpp
+ *
+ *  Created on: May 2, 2016
+ *      Author: josen
+ */
+#include "Consumer.hpp"
 
-Consumer::Consumer(BoundedBuffer* connectedSockets) 
+//const std::string Consumer::filePath = "/home/josen/workspace/boost_threading_programs/FileServer/src/files";
+
+Consumer::Consumer(boost::shared_ptr<BoundedBuffer>& connectedSockets)
 {
 	this->connectedSockets = connectedSockets;
+}
+
+Consumer::~Consumer()
+{
 }
 
 void Consumer::run(void)
 {
 	while(true)
 	{
-		tcp::socket* socket;
+		boost::shared_ptr<tcp::socket> socket;
 		std::string method, filename, singleLine;
 		std::stringstream httpRequest, httpResponse, payload;
 		std::ifstream requestedFile;
@@ -21,11 +33,18 @@ void Consumer::run(void)
 
 		// get the http request
 		requestSize = socket->receive(boost::asio::buffer(requestBuffer, REQUESTED_BUFFER_SIZE));
-		
+
 		httpRequest << std::string(requestBuffer, requestSize);
 		httpRequest >> method >> filename;
 
-		requestedFile.open(DOWNLOAD_FILE_PATH + filename, std::ios::binary);
+		std::cout << "DEBUG" << " " << "filename: " << filename << std::endl;
+
+		//const std::string filePath = DOWNLOAD_FILE_PATH + filename;
+		const std::string tempFilePath = std::string("/home/josen/workspace/boost_threading_programs/FileServer/src/files") + filename;
+		const std::ios_base::openmode fileMode = std::ios::binary;
+
+		//requestedFile.open(DOWNLOAD_FILE_PATH + filename, std::ios::binary);
+		requestedFile.open(tempFilePath, fileMode);
 
 		if(requestedFile.is_open())
 		{
@@ -33,6 +52,7 @@ void Consumer::run(void)
 			while(getline(requestedFile, singleLine))
 			{
 				payload << singleLine << std::endl;
+				std::cout << "DEBUG" << " " << "singleLine: " << singleLine << std::endl;
 			}
 
 			// prepare http respone
@@ -54,13 +74,15 @@ void Consumer::run(void)
 
 		// send the http-response header
 		socket->send(boost::asio::buffer(httpResponse.str().c_str(), httpResponse.str().length()));
-		
+
 		// send the http-response payload
 		socket->send(boost::asio::buffer(payload.str().c_str(), payload.str().length()));
-		
+
+		std::cout << "DEBUG" << " " << "payload: " << payload.str().c_str() << std::endl;
+
 		socket->shutdown(tcp::socket::shutdown_both);
 		socket->close();
 
-		delete socket;
+		//delete socket;
 	}
 }
